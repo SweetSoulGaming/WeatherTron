@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-   
+    
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -13,7 +13,9 @@
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
     />
-    
+    <i class="fas fa-cloud"></i>
+    <i class="fas fa-wind"></i>
+    <i class="fas fa-sun"></i>
     <link rel= "stylesheet" href= "CSS/style.css"/>
     
     <title>Weather Dashboard</title>
@@ -40,8 +42,14 @@
               <i class="fa fa-search"></i>
               </button>
           </div>
-
+        </div>
+        <div class= "card rounded my-3 shadow-lg back-card"> 
+        <div class="card-top text-center">   
           <ul class="list-group history" id="history"></ul>
+         <p>Forecast</p>
+          <span>...</span>
+        </div>
+         </div>
         </aside>
 
         <div class="col-lg-9">
