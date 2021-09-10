@@ -3,7 +3,7 @@ oppositeUnits = {"C":"F","F":"C"};
 currentTempK = 0;
 
 $(document).ready(function() {
-  console.log(ready);
+  console.log();
     // Only change code below this line.
   if (navigator.geolocation) {
 pos = navigator.geolocation.getCurrentPosition(success);
@@ -15,7 +15,7 @@ pos = navigator.geolocation.getCurrentPosition(success);
 function success(pos)
 {
   var owAPI = "http://api.openweathermap.org/data/2.5/weather?"
-  var apiID = "f4bf4a934d397e7da919ac913410cfdf"
+  var apiID = ""
   lat = pos.coords.latitude;
   long = pos.coords.longitude;
   var serverString = owAPI+"lat="+lat+"&lon="+long+"&callback=?&appid="+apiID;
