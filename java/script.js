@@ -1,72 +1,54 @@
-currentUnits = "C"
-oppositeUnits = {"C":"F","F":"C"};
-currentTempK = 0;
+window.addEventListener('load', ()=>{
+  let long;
+  let lat;
+  let temperatureDescription = document.querySelector('.temperature-description');
+  let temperatureDegree = document.querySelector('.temperature-degree');
+  let location = document.querySelector('.location-timezone');
+  let weatherImage = document.querySelector('.weather-icon');
+  let cityNotFound = document.querySelector('.city-not-found');
+  const searchClicked = () => {
+      let city = document.getElementById("city-search").value
+      getWeather(city);
+  }
+  const getWeather = (city=null, lat=null, long=null) => {
+      let api='';
+      if (city) {
+          api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=c1522f6d88e19f3e404227fff64a171e`;
+      } else {
+          api = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=c1522f6d88e19f3e404227fff64a171e`;
+      }
+      fetch(api)
+      .then(res =>{
+          return res.json();
+      })
+      .then(data =>{
+          if (data.cod == "404") {
+              cityNotFound.textContent = "* City Not Found";
+          } else {
+              const temp = data.main.temp;
+              const locationName = data.name;
+              const weather = data.weather[0].description;
+              const weatherIconImage = `https://openweathermap.org/img/w/${data.weather[0].icon}.png`;
+              //Set DOM elements from the API
+              cityNotFound.textContent = "";
+              temperatureDegree.textContent = temp;
+              temperatureDescription.textContent = weather;
+              location.textContent = locationName;
+              weatherImage.src = weatherIconImage;
+          }
+      })
 
-$(document).ready(function() {
-  console.log();
-    // Only change code below this line.
-  if (navigator.geolocation) {
-pos = navigator.geolocation.getCurrentPosition(success);
-}
- $(".convert").on("click",
-      convertPressed);
-});
+  }
+  document.getElementById("search-city-button").addEventListener("click", searchClicked);
 
-function success(pos)
-{
-  var owAPI = "http://api.openweathermap.org/data/2.5/weather?"
-  var apiID = ""
-  lat = pos.coords.latitude;
-  long = pos.coords.longitude;
-  var serverString = owAPI+"lat="+lat+"&lon="+long+"&callback=?&appid="+apiID;
-console.log(serverString);
-    $.ajax({
-      dataType: "jsonp",
-      url: serverString,
-      success: callback
-    });
- }
 
-function callback(json)
-{
-  console.log(json.weather[0].description);
-  console.log(json.name);
-  $("#placeName").html(json.name+", "+json.sys.country)
-  currentTempK = json.main.temp
-  updateTemp(currentTempK);
-  $("#description").html(capitalizeFirst(json.weather[0].description));
-  $("#weatherIcon").attr("src","http://openweathermap.org/img/w/"+json.weather[0].icon+".png")
-}
-  
-function updateTemp(tempK)
-{
-
-  if (currentUnits == "C")
-    {
-      temp = tempK - 273.15; 
-    }
-  else
-    {
-      temp = (tempK-273.15)*1.8+32;
-    }
-    $("#temp").html(temp.toFixed(1)+"&deg"+currentUnits);
- $(".convert").html("to &deg"+oppositeUnits[currentUnits]);
-    
-}
-
-function convertPressed()
-{
-  currentUnits = oppositeUnits[currentUnits];
-  updateTemp(currentTempK)
- 
-}
-  // Only change code above this line.
-
-function capitalizeFirst(str)
-{
-  splitted = str.split(" ");
-  capitalized = splitted.map(function(val){
-             return val.charAt(0).toUpperCase()+val.slice(1)
-                         });
-   return capitalized.join(" ");
-}
+  if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(position => {
+          long = position.coords.longitude;
+          lat = position.coords.latitude;
+          getWeather(null, lat, long)
+      })
+  } else {
+      h1.textContent = "Could not determine the location";
+  }
+})
